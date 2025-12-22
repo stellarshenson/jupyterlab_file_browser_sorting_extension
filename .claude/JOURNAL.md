@@ -1,0 +1,14 @@
+# Claude Code Journal
+
+This journal tracks substantive work on documents, diagrams, and documentation content.
+
+---
+
+1. **Task - Project initialization** (v0.4.2): Created new JupyterLab extension `jupyterlab_file_browser_sorting_extension` using copier template<br>
+   **Result**: Initialized extension project with TypeScript frontend, Python packaging via `pyproject.toml`, GitHub Actions workflows for build/publish/release, Jest unit tests, Playwright integration tests, and Makefile for standardized build commands. Extension provides file browser sorting capabilities including case-sensitive sorting. Created `.claude/CLAUDE.md` with project-specific configuration importing workspace-level rules. Updated `README.md` with standard GitHub badges (build status, npm, PyPI, downloads, JupyterLab 4, KOLOMOLO branding) and brief feature description. Project requires JupyterLab >= 4.0.0.
+
+2. **Task - LC_COLLATE=C sorting implementation** (v0.4.2): Implemented ASCIIbetical sorting for JupyterLab file browser<br>
+   **Result**: Researched JupyterLab 4.x file browser internals - the `DirListing` class in `@jupyterlab/filebrowser` handles sorting via private `_sortedItems` array populated by `Private.sort()` function using `localeCompare` with `sensitivity: 'base'` (case-insensitive). Implemented monkey-patching approach in `src/index.ts` that overrides `DirListing.sort()` method to use custom `cLocaleCompare()` function implementing LC_COLLATE=C ordering: dot files first, then numbers (0-9), uppercase (A-Z), underscore, lowercase (a-z). Added dependencies `@jupyterlab/filebrowser` and `@jupyterlab/settingregistry` to `package.json`. Extension hooks into `IFileBrowserFactory.tracker` to patch both existing and newly created file browsers. Respects JupyterLab's `sortNotebooksFirst` setting and maintains directory-first ordering. Updated README with LC_COLLATE=C explanation and example sort order.
+
+3. **Task - Menu toggle for sorting mode** (v0.4.2): Added context menu toggle for Unix-style sorting<br>
+   **Result**: Created `schema/plugin.json` with `useCLocaleSorting` boolean setting (default: true) for persistent configuration. Added `schemaDir` reference to `package.json` jupyterlab section. Registered toggle command `filebrowser:toggle-unix-sorting` with `isToggleable: true` that updates setting via `ISettingRegistry`. Added command to file browser context menu with selector `.jp-DirListing-content` at rank 10.5 (near "Sort Notebooks Above Files"). Refactored `sortItems()` function to accept `useCLocale` parameter and switch between `cLocaleCompare()` and standard `localeCompare()` based on setting. Added `resortAllBrowsers()` function that triggers re-sort on all patched browsers when settings change. Updated README with usage instructions for the context menu toggle.
