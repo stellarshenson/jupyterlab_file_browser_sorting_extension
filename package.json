@@ -1,6 +1,6 @@
 {
     "name": "jupyterlab_file_browser_sorting_extension",
-    "version": "0.4.3",
+    "version": "1.0.2",
     "description": "Jupyterlab extension to help with sorting of the files in file browser (i.e. case sensitive sorting)",
     "keywords": [
         "jupyter",
@@ -88,7 +88,7 @@
         "yjs": "^13.5.0"
     },
     "resolutions": {
-        "lib0": "0.2.111"
+        "lib0": "0.2.97"
     },
     "sideEffects": [
         "style/*.css",
