@@ -1,25 +1,37 @@
 import { expect, test } from '@jupyterlab/galata';
 
-/**
- * Don't load JupyterLab webpage before running the tests.
- * This is required to ensure we capture all log messages.
- */
-test.use({ autoGoto: false });
-
-test('should emit an activation console message', async ({ page }) => {
-  const logs: string[] = [];
+test('should load the extension without errors', async ({ page }) => {
+  const errors: string[] = [];
 
   page.on('console', message => {
-    logs.push(message.text());
+    if (message.type() === 'error') {
+      errors.push(message.text());
+    }
   });
 
   await page.goto();
 
-  expect(
-    logs.filter(
-      s =>
-        s ===
-        'JupyterLab extension jupyterlab_file_browser_sorting_extension is activated!'
-    )
-  ).toHaveLength(1);
+  // Wait for JupyterLab to fully load
+  await page.waitForSelector('.jp-FileBrowser');
+
+  // Filter out errors not related to our extension
+  const extensionErrors = errors.filter(e =>
+    e.includes('jupyterlab_file_browser_sorting_extension')
+  );
+
+  expect(extensionErrors).toHaveLength(0);
+});
+
+test('should show Unix Style Sorting in context menu', async ({ page }) => {
+  await page.goto();
+
+  // Wait for file browser to load
+  await page.waitForSelector('.jp-DirListing-content');
+
+  // Right-click on file browser content area
+  await page.click('.jp-DirListing-content', { button: 'right' });
+
+  // Check for our menu item
+  const menuItem = page.locator('text=Unix Style Sorting');
+  await expect(menuItem).toBeVisible();
 });
