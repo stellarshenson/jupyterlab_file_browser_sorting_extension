@@ -28,6 +28,7 @@ When enabled, the extension sorts files using the standard Unix C locale collati
 ```
 
 **Example sort order:**
+
 ```
 .hidden
 .profile

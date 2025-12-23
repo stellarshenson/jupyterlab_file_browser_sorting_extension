@@ -50,8 +50,12 @@ function sortItems(
   const reverse = state.direction === 'descending' ? -1 : 1;
 
   function getPriority(item: Contents.IModel): number {
-    if (item.type === 'directory') return 0;
-    if (sortNotebooksFirst && item.type === 'notebook') return 1;
+    if (item.type === 'directory') {
+      return 0;
+    }
+    if (sortNotebooksFirst && item.type === 'notebook') {
+      return 1;
+    }
     return 2;
   }
 
@@ -64,7 +68,9 @@ function sortItems(
   copy.sort((a, b) => {
     const priorityA = getPriority(a);
     const priorityB = getPriority(b);
-    if (priorityA !== priorityB) return priorityA - priorityB;
+    if (priorityA !== priorityB) {
+      return priorityA - priorityB;
+    }
 
     let result: number;
     if (state.key === 'last_modified') {
@@ -101,7 +107,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
      * Force re-sort on a single listing
      */
     function resortListing(listing: any): void {
-      if (!listing || !listing.sortState) return;
+      if (!listing || !listing.sortState) {
+        return;
+      }
       // Use patched sort method which handles customSortedItems
       listing.sort(listing.sortState);
     }
@@ -120,7 +128,9 @@ const plugin: JupyterFrontEndPlugin<void> = {
      * Patch a DirListing to use custom sorting.
      */
     function patchListing(listing: any): void {
-      if (!listing || patchedListings.has(listing)) return;
+      if (!listing || patchedListings.has(listing)) {
+        return;
+      }
       patchedListings.add(listing);
 
       // Store reference to our custom sorted items
@@ -196,7 +206,8 @@ const plugin: JupyterFrontEndPlugin<void> = {
             (settings.get('sortNotebooksFirst').composite as boolean) ?? false;
           settings.changed.connect(() => {
             sortNotebooksFirst =
-              (settings.get('sortNotebooksFirst').composite as boolean) ?? false;
+              (settings.get('sortNotebooksFirst').composite as boolean) ??
+              false;
           });
         })
         .catch(() => {});
