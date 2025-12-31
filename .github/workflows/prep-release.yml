@@ -3,34 +3,43 @@ on:
   workflow_dispatch:
     inputs:
       version_spec:
-        description: "New Version Specifier"
-        default: "next"
-        required: false
-      branch:
-        description: "The branch to target"
-        required: false
-      post_version_spec:
-        description: "Post Version Specifier"
-        required: false
+        description: "New Version (e.g., 1.0.14)"
+        required: true
 jobs:
   prep_release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
 
-      - name: Prep Release
-        id: prep-release
-        uses: jupyter-server/jupyter_releaser/.github/actions/prep-release@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          version_spec: ${{ github.event.inputs.version_spec }}
-          post_version_spec: ${{ github.event.inputs.post_version_spec }}
-          branch: ${{ github.event.inputs.branch }}
-          since_last_stable: false
-          silent: true
-
-      - name: "** Next Step **"
+      - name: Update version
         run: |
-          echo "Optional): Review Draft Release: ${{ steps.prep-release.outputs.release_url }}"
+          npm version ${{ github.event.inputs.version_spec }} --no-git-tag-version
+          echo "Updated to version ${{ github.event.inputs.version_spec }}"
+
+      - name: Build extension
+        run: |
+          pip install -e .
+          jlpm run build:prod
+
+      - name: Create release commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Release v${{ github.event.inputs.version_spec }}" || echo "No changes to commit"
+          git tag "v${{ github.event.inputs.version_spec }}"
+          git push origin main --tags
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "v${{ github.event.inputs.version_spec }}"
+          name: "v${{ github.event.inputs.version_spec }}"
+          body: "Release v${{ github.event.inputs.version_spec }}"
+          draft: true
