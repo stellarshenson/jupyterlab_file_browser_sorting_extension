@@ -18,8 +18,8 @@ jobs:
     permissions:
       contents: write
     env:
-      # Skip changelog generation - we commit directly without PRs
-      RH_SINCE: ""
+      # Disable tag-based changelog - we commit directly without PRs
+      RH_SINCE_LAST_STABLE: "false"
     steps:
       - uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
 
@@ -31,6 +31,7 @@ jobs:
           version_spec: ${{ github.event.inputs.version_spec }}
           post_version_spec: ${{ github.event.inputs.post_version_spec }}
           branch: ${{ github.event.inputs.branch }}
+          since_last_stable: false
 
       - name: "** Next Step **"
         run: |
