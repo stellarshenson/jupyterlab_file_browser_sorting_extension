@@ -43,3 +43,4 @@ jobs:
           name: "v${{ github.event.inputs.version_spec }}"
           body: "Release v${{ github.event.inputs.version_spec }}"
           draft: true
+
