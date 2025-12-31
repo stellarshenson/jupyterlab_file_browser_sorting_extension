@@ -22,14 +22,16 @@ test('should load the extension without errors', async ({ page }) => {
   expect(extensionErrors).toHaveLength(0);
 });
 
-test('should show Unix Style Sorting in context menu', async ({ page }) => {
+test('should show Unix Style Sorting in column header context menu', async ({
+  page
+}) => {
   await page.goto();
 
-  // Wait for file browser to load
-  await page.waitForSelector('.jp-DirListing-content');
+  // Wait for file browser header to load
+  await page.waitForSelector('.jp-DirListing-headerItem');
 
-  // Right-click on file browser content area
-  await page.click('.jp-DirListing-content', { button: 'right' });
+  // Right-click on column header (Name column)
+  await page.click('.jp-DirListing-headerItem', { button: 'right' });
 
   // Check for our menu item
   const menuItem = page.locator('text=Unix Style Sorting');

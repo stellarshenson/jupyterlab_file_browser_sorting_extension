@@ -245,16 +245,10 @@ const plugin: JupyterFrontEndPlugin<void> = {
       }
     });
 
-    // Add to context menu at bottom
+    // Add to column header context menu only
     app.contextMenu.addItem({
       command: COMMAND_TOGGLE_UNIX_SORT,
-      selector: '.jp-DirListing-item',
-      rank: 100
-    });
-
-    app.contextMenu.addItem({
-      command: COMMAND_TOGGLE_UNIX_SORT,
-      selector: '.jp-DirListing',
+      selector: '.jp-DirListing-headerItem',
       rank: 100
     });
 
