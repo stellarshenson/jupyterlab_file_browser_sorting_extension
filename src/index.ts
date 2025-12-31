@@ -152,13 +152,16 @@ const plugin: JupyterFrontEndPlugin<void> = {
         direction: 'ascending' | 'descending';
         key: string;
       }): void {
+        console.log('[UnixSort] sort() called with state:', state);
         const model = this.model;
         if (!model) {
+          console.log('[UnixSort] No model, using original sort');
           originalSort(state);
           return;
         }
 
         const itemsArray = Array.from(model.items()) as Contents.IModel[];
+        console.log('[UnixSort] Items count:', itemsArray.length);
         if (itemsArray.length === 0) {
           this._sortState = state;
           customSortedItems = [];
@@ -167,7 +170,15 @@ const plugin: JupyterFrontEndPlugin<void> = {
           return;
         }
 
+        console.log(
+          '[UnixSort] Before sort:',
+          itemsArray.map(i => i.name)
+        );
         const sorted = sortItems(itemsArray, state);
+        console.log(
+          '[UnixSort] After sort:',
+          sorted.map(i => i.name)
+        );
         customSortedItems = sorted;
         this._sortedItems = sorted;
         this._sortState = state;
@@ -254,11 +265,16 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
     // Wait for app to be fully restored before patching
     app.restored.then(() => {
+      console.log('[UnixSort] App restored, patching browsers...');
       // Patch existing browsers
-      tracker.forEach(patchFileBrowser);
+      tracker.forEach(browser => {
+        console.log('[UnixSort] Patching existing browser:', browser.id);
+        patchFileBrowser(browser);
+      });
 
       // Patch new browsers when added
       tracker.widgetAdded.connect((_, browser) => {
+        console.log('[UnixSort] Patching new browser:', browser.id);
         patchFileBrowser(browser);
       });
     });
