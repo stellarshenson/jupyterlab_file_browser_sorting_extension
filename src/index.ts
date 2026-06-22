@@ -111,7 +111,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
       if (!listing || !listing.sortState) {
         return;
       }
-      // Use patched sort method which handles customSortedItems
+      // Use patched sort method which updates _sortedItems
       listing.sort(listing.sortState);
     }
 
@@ -134,17 +134,6 @@ const plugin: JupyterFrontEndPlugin<void> = {
       }
       patchedListings.add(listing);
 
-      // Store reference to our custom sorted items
-      let customSortedItems: Contents.IModel[] = [];
-
-      // Override sortedItems getter to return our custom sorted items
-      Object.defineProperty(listing, 'sortedItems', {
-        get: function () {
-          return customSortedItems;
-        },
-        configurable: true
-      });
-
       // Store original sort
       const originalSort = listing.sort.bind(listing);
 
@@ -162,14 +151,12 @@ const plugin: JupyterFrontEndPlugin<void> = {
         const itemsArray = Array.from(model.items()) as Contents.IModel[];
         if (itemsArray.length === 0) {
           this._sortState = state;
-          customSortedItems = [];
           this._sortedItems = [];
           originalSort(state);
           return;
         }
 
         const sorted = sortItems(itemsArray, state);
-        customSortedItems = sorted;
         this._sortedItems = sorted;
         this._sortState = state;
         this.update();

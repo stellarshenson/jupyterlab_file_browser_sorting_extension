@@ -20,7 +20,7 @@
     "strict": true,
     "strictNullChecks": true,
     "target": "ES2018",
-    "types": ["jest"]
+    "types": ["jest", "node"]
   },
   "include": ["src/*"]
 }
