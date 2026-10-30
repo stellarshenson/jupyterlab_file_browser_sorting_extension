@@ -16,6 +16,8 @@ jobs:
           fetch-depth: 0
 
       - uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
+        with:
+          python_version: '3.13'
 
       - name: Update version
         run: |

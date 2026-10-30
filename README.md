@@ -49,7 +49,7 @@ This matches the behavior of `LC_COLLATE=C ls` on Unix systems.
 
 ## Requirements
 
-- JupyterLab >= 4.0.0
+- JupyterLab >= 4.6.0
 
 ## Installation
 

@@ -4,3 +4,7 @@ node_modules
 **/package.json
 !/package.json
 jupyterlab_file_browser_sorting_extension
+eslint.config.mjs
+.venv
+.claude
+.agents
