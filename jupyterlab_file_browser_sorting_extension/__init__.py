@@ -12,5 +12,5 @@ except ImportError:
 def _jupyter_labextension_paths():
     return [{
         "src": "labextension",
-        "dest": "jupyterlab_file_browser_sorting_extension"
+        "dest": "@stellarshenson/jupyterlab-file-browser-sorting-extension"
     }]

@@ -16,7 +16,7 @@ test('should load the extension without errors', async ({ page }) => {
 
   // Filter out errors not related to our extension
   const extensionErrors = errors.filter(e =>
-    e.includes('jupyterlab_file_browser_sorting_extension')
+    e.includes('@stellarshenson/jupyterlab-file-browser-sorting-extension')
   );
 
   expect(extensionErrors).toHaveLength(0);

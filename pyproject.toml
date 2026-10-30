@@ -42,8 +42,8 @@ artifacts = ["jupyterlab_file_browser_sorting_extension/labextension"]
 exclude = [".github", "binder"]
 
 [tool.hatch.build.targets.wheel.shared-data]
-"jupyterlab_file_browser_sorting_extension/labextension" = "share/jupyter/labextensions/jupyterlab_file_browser_sorting_extension"
-"install.json" = "share/jupyter/labextensions/jupyterlab_file_browser_sorting_extension/install.json"
+"jupyterlab_file_browser_sorting_extension/labextension" = "share/jupyter/labextensions/@stellarshenson/jupyterlab-file-browser-sorting-extension"
+"install.json" = "share/jupyter/labextensions/@stellarshenson/jupyterlab-file-browser-sorting-extension/install.json"
 
 [tool.hatch.build.hooks.version]
 path = "jupyterlab_file_browser_sorting_extension/_version.py"

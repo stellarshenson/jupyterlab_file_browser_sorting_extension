@@ -6,7 +6,8 @@ import { IFileBrowserFactory, FileBrowser } from '@jupyterlab/filebrowser';
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 import { Contents } from '@jupyterlab/services';
 
-const PLUGIN_ID = 'jupyterlab_file_browser_sorting_extension:plugin';
+const PLUGIN_ID =
+  '@stellarshenson/jupyterlab-file-browser-sorting-extension:plugin';
 const COMMAND_TOGGLE_UNIX_SORT = 'filebrowser:toggle-unix-sorting';
 
 /**

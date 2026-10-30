@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-describe('jupyterlab_file_browser_sorting_extension', () => {
+describe('@stellarshenson/jupyterlab-file-browser-sorting-extension', () => {
   // Guards against the JupyterLab 4.6 focus crash: core DirListing.sortedItems
   // is a method returning an iterator, so the extension must not shadow it with
   // a property/getter. The custom order is driven by `this._sortedItems` instead.
