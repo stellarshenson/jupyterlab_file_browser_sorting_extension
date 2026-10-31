@@ -3,46 +3,51 @@ on:
   workflow_dispatch:
     inputs:
       version_spec:
-        description: "New Version (e.g., 1.0.14)"
-        required: true
+        description: "New Version Specifier"
+        default: "next"
+        required: false
+      branch:
+        description: "The branch to target"
+        required: false
+      post_version_spec:
+        description: "Post Version Specifier"
+        required: false
+      # silent:
+      #   description: "Set a placeholder in the changelog and don't publish the release."
+      #   required: false
+      #   type: boolean
+      since:
+        description: "Use PRs with activity since this date or git reference"
+        required: false
+      since_last_stable:
+        description: "Use PRs with activity since the last stable git tag"
+        required: false
+        type: boolean
 jobs:
   prep_release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
       - uses: jupyterlab/maintainer-tools/.github/actions/base-setup@v1
         with:
           python_version: '3.13'
 
-      - name: Update version
-        run: |
-          npm version ${{ github.event.inputs.version_spec }} --no-git-tag-version
-          echo "Updated to version ${{ github.event.inputs.version_spec }}"
-
-      - name: Build extension
-        run: |
-          pip install -e .
-          jlpm run build:prod
-
-      - name: Create release commit
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -m "Release v${{ github.event.inputs.version_spec }}" || echo "No changes to commit"
-          git tag "v${{ github.event.inputs.version_spec }}"
-          git push origin main --tags
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+      - name: Prep Release
+        id: prep-release
+        uses: jupyter-server/jupyter_releaser/.github/actions/prep-release@v2
         with:
-          tag_name: "v${{ github.event.inputs.version_spec }}"
-          name: "v${{ github.event.inputs.version_spec }}"
-          body: "Release v${{ github.event.inputs.version_spec }}"
-          draft: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version_spec: ${{ github.event.inputs.version_spec }}
+          # silent: ${{ github.event.inputs.silent }}
+          post_version_spec: ${{ github.event.inputs.post_version_spec }}
+          branch: ${{ github.event.inputs.branch }}
+          since: ${{ github.event.inputs.since }}
+          since_last_stable: ${{ github.event.inputs.since_last_stable }}
+          steps_to_skip: "build-changelog" # template-sync: keep
+        env: # template-sync: keep
+          RH_SINCE_LAST_STABLE: 'true' # template-sync: keep
 
+      - name: "** Next Step **"
+        run: |
+          echo "Optional): Review Draft Release: ${{ steps.prep-release.outputs.release_url }}"

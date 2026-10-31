@@ -20,7 +20,7 @@
     "strict": true,
     "strictNullChecks": true,
     "target": "ES2018",
-    "types": ["jest", "node"]
+    "types": ["jest", "node"] // template-sync: keep - the Jest spec reads src/index.ts through fs, path and __dirname
   },
   "include": ["src/*"]
 }

@@ -31,7 +31,7 @@ JupyterLab extension implementing LC_COLLATE=C (ASCIIbetical) sorting for the fi
 
 **Package Names**:
 
-- npm: `jupyterlab_file_browser_sorting_extension`
+- npm: `@stellarshenson/jupyterlab-file-browser-sorting-extension`
 - PyPI: `jupyterlab-file-browser-sorting-extension`
 - GitHub: `stellarshenson/jupyterlab_file_browser_sorting_extension`
 
